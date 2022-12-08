@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  labels:
+    {{- include "backend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicas }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app : {{ .Values.deployment.spec.selector.matchLabels.app }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app : {{ .Values.deployment.spec.selector.matchLabels.app }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "backend.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: springboot-port
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          livenessProbe:
+            periodSeconds: 3
+            timeoutSeconds: 2
+            httpGet:
+              path: /api/
+              port: {{ .Values.service.targetPort }}
+              httpHeaders:
+                - name: "personal-header-from-liveness-probe"
+                  value: "Container including Springboot, are you still alive ? Or do we have to restart ?"
+          startupProbe:
+            httpGet:
+              failureThreshold: 6
+              periodSeconds: 10
+              path: /api/
+              port: {{ .Values.service.targetPort }}
+          readinessProbe:
+            periodSeconds: 5
+            timeoutSeconds: 2
+            httpGet:
+              path: /api/
+              port: {{ .Values.service.targetPort }}
+              httpHeaders:
+                - name: "personal-header-from-readyness-probe"
+                  value: "Container including springboot, are you ready to accept incoming request traffic ? or do we need to hide POD from LoadBalancer until you re ready ?"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

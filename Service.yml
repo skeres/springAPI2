@@ -1,0 +1,16 @@
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: springboot-k8s-svc
+  labels:
+    tag: service
+spec:                      # spec field specifies the pod and its desired state
+  selector:
+    app: spring-api-k8s-selector    # The spec.selector field defines how the Deployment finds which Pods to manage.
+                                    # In this case, you select a label that is defined in the Pod template
+                                    # see Deployment.yml file : spec.selector.matchLabels.app = spring-api-k8s-selector
+  type: ClusterIP                   # type of the service.
+  ports:
+    - protocol: "TCP"
+      port: 8484           # service listen on this port in the cluster
+      targetPort: 8383     # service send request to this port to all Pods with selector key/value app: spring-api-k8s-selector

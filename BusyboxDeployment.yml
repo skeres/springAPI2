@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox
+spec:
+  selector:
+    matchLabels:
+      app: busybox
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+        - name : mybusybox-container
+          image : busybox:latest
+          command: [ "/bin/sh" ]
+          args: [ "-c", "while true; do now=$(date); echo \"Hello from the busybox Pod ! at $now\"; sleep 10; done" ]
+          imagePullPolicy: IfNotPresent

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: springapi2-configmap-env
+  namespace: default
+data:
+  POSTGRES_USER: "stephane"
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_URL : "postgres-test-postgresql:5432"
+
+---

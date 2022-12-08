@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-k8s-deployment
+  labels:
+    tag: deployment
+spec:
+  selector:
+    matchLabels:
+      app: spring-api-k8s-selector
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: spring-api-k8s-selector
+    spec:
+      containers:
+        - name: spring-api-k8s-container
+          image: skeres95250/spring-api2:v1.0  # Image that will be used to containers in the cluster
+          imagePullPolicy: Always
+          #imagePullPolicy: IfNotPresent      # Uncomment this line to pull just once
+          envFrom:
+            - configMapRef:
+                name: springapi2-configmap-env
+          ports:
+            - containerPort: 8383             # The port that the container expose in the cluster pod

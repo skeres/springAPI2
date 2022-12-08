@@ -38,29 +38,25 @@ spec:
               containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
           livenessProbe:
-            periodSeconds: 3
-            timeoutSeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
             httpGet:
               path: /api/
               port: {{ .Values.service.targetPort }}
               httpHeaders:
                 - name: "personal-header-from-liveness-probe"
-                  value: "Container including Springboot, are you still alive ? Or do we have to restart ?"
+                  value: "Container including Springboot, are you still alive ? Or do I have to restart the pod ?"
           startupProbe:
-            httpGet:
-              failureThreshold: 6
-              periodSeconds: 10
-              path: /api/
-              port: {{ .Values.service.targetPort }}
-          readinessProbe:
-            periodSeconds: 5
-            timeoutSeconds: 2
+            initialDelaySeconds: 60
+            failureThreshold: 6
+            periodSeconds: 10
+            timeoutSeconds: 3
             httpGet:
               path: /api/
               port: {{ .Values.service.targetPort }}
               httpHeaders:
                 - name: "personal-header-from-readyness-probe"
-                  value: "Container including springboot, are you ready to accept incoming request traffic ? or do we need to hide POD from LoadBalancer until you re ready ?"
+                  value: "Headers from startupProbe"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

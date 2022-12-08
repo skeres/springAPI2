@@ -88,9 +88,9 @@ kubectl exec -it debug -- sh
 inside the pod : wget -S -O - http://springboot-k8s-svc:8484/api/listeEtudiants
 kubectl delete -n default pod debug
 
-alternate busybox tool :
-source : https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/
-kubectl run -it --rm --restart=Never busybox --image=gcr.io/google-containers/busybox sh
+alternate busybox tool :  
+source : https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/  
+kubectl run -it --rm --restart=Never busybox --image=gcr.io/google-containers/busybox sh  
 
-kubectl apply -f ./ConfigMapEnv.yml
+kubectl apply -f ./ConfigMapEnv.yml  
 kubectl delete -n default configmap springapi2-configmap-env

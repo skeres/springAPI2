@@ -94,3 +94,13 @@ kubectl run -it --rm --restart=Never busybox --image=gcr.io/google-containers/bu
 
 kubectl apply -f ./ConfigMapEnv.yml  
 kubectl delete -n default configmap springapi2-configmap-env
+
+To use kubernetes secrets : secrets data MUST BE base64 encoded
+To get encoded value, type in a terminal :
+echo -n "stephane" | base64
+result :
+c3RlcGhhbmU=
+
+echo -n "postgres" | base64
+result :
+cG9zdGdyZXM=

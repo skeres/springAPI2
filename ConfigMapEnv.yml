@@ -4,8 +4,8 @@ metadata:
   name: springapi2-configmap-env
   namespace: default
 data:
-  POSTGRES_USER: "stephane"
-  POSTGRES_PASSWORD: "postgres"
+  #POSTGRES_USER: "stephane"        # key-value is now stored in secret
+  #POSTGRES_PASSWORD: "postgres"    # key-value is now stored in secret
   POSTGRES_URL : "postgres-test-postgresql:5432"
 
 ---

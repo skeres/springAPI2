@@ -5,11 +5,11 @@
 ### Build image and push it to personnal Dockerhub repository
 
 ```
-docker build --tag skeres95250/spring-api:v1.0 --file ./Dockerfile .
+docker build --tag skeres95250/spring-api2:v1.0 --file ./Dockerfile .
 ```
 
 ```
-docker image push skeres95250/spring-api:v1.0
+docker image push skeres95250/spring-api2:v1.0
 ```
 
 ### Create deployment

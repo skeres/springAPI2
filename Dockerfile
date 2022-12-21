@@ -1,5 +1,6 @@
 FROM openjdk:8-jdk-alpine
 RUN addgroup -S spring && adduser -S spring -G spring
+RUN apk update && apk upgrade && apk add curl
 ARG SPRING_HOME_DIR=/home/spring
 RUN mkdir -p $SPRING_HOME_DIR/app && chown -R spring:spring $SPRING_HOME_DIR/app && mkdir -p $SPRING_HOME_DIR/app/log && chown -R spring:spring $SPRING_HOME_DIR/app/log
 ARG JAR_FILE=target/*.jar
